@@ -26,7 +26,10 @@
     "toolsVisibility3d": true
   },
   "__version__": "1.0.3",
-  "builder": {},
+  "builder": {
+    "taskOptionsMap": {},
+    "__version__": "1.3.9"
+  },
   "snap-configs": {
     "position": {
       "x": 1,
@@ -55,5 +58,82 @@
         }
       }
     }
+  },
+  "camera-infos": {
+    "d374daca-ab4e-4e90-ae1b-eb10b88f9ce2": {
+      "position": {
+        "x": 360.0000000000001,
+        "y": 639.9999999999999,
+        "z": 5000
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0,
+        "w": 1
+      },
+      "viewCenter": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "contentRect": {
+        "x": 0,
+        "y": 0,
+        "width": 256.725,
+        "height": 456.4
+      },
+      "scale": 0.3565625
+    },
+    "6528b51d-a902-461b-80c4-48fefb2d5bb9": {
+      "position": {
+        "x": 308.50080928527876,
+        "y": 1025.443682628664,
+        "z": 5000
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0,
+        "w": 1
+      },
+      "viewCenter": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "contentRect": {
+        "x": -403.6549864181632,
+        "y": 540.7614500622296,
+        "width": 958,
+        "height": 652
+      },
+      "scale": 0.6726056333317642
+    }
+  },
+  "camera-uuids": [
+    "d374daca-ab4e-4e90-ae1b-eb10b88f9ce2",
+    "6528b51d-a902-461b-80c4-48fefb2d5bb9"
+  ],
+  "camera": {
+    "color": [
+      48,
+      48,
+      48,
+      255
+    ],
+    "fov": 45,
+    "far": 10000,
+    "near": 0.01,
+    "wheelSpeed": 0.01,
+    "wanderSpeed": 10,
+    "enableAcceleration": true,
+    "size": "__default_design__",
+    "far2D": 10000,
+    "near2D": 1,
+    "wheelSpeed2D": 6,
+    "iso": 0,
+    "aperture": 19,
+    "shutter": 7
   }
 }

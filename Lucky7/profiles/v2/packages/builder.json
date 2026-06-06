@@ -2,5 +2,93 @@
   "__version__": "1.3.9",
   "log": {
     "level": 4
+  },
+  "common": {
+    "binGroupConfig": {
+      "threshold": 16,
+      "enable": false
+    },
+    "polyfills": {
+      "asyncFunctions": true
+    },
+    "buildPath": "C:\\Users\\Mark - PC\\Documents\\builds",
+    "outputName": "Lucky7",
+    "mainBundleCompressionType": "merge_dep",
+    "platform": "web-mobile"
+  },
+  "BuildTaskManager": {
+    "taskMap": {
+      "1780719515080": {
+        "type": "build",
+        "id": "1780719515080",
+        "progress": 1,
+        "state": "success",
+        "stage": "build",
+        "message": "6-6-2026 12:19:45 build success in 1 min 10 s!",
+        "detailMessage": "// ---- build task cocos-service：onAfterCompressSettings ----\r",
+        "options": {
+          "name": "Lucky7",
+          "server": "",
+          "engineModulesConfigKey": "defaultConfig",
+          "platform": "web-mobile",
+          "buildPath": "C:\\Users\\Mark - PC\\Documents\\builds",
+          "debug": false,
+          "buildMode": "normal",
+          "mangleProperties": false,
+          "md5Cache": false,
+          "skipCompressTexture": false,
+          "sourceMaps": false,
+          "overwriteProjectSettings": {
+            "includeModules": {
+              "gfx-webgl2": "on",
+              "physics": "inherit-project-setting",
+              "physics-2d": "inherit-project-setting"
+            },
+            "macroConfig": {
+              "cleanupImageCache": "inherit-project-setting"
+            }
+          },
+          "nativeCodeBundleMode": "both",
+          "polyfills": {
+            "asyncFunctions": true
+          },
+          "experimentalEraseModules": false,
+          "startSceneAssetBundle": false,
+          "bundleConfigs": [],
+          "inlineEnum": true,
+          "useBuiltinServer": false,
+          "md5CacheOptions": {
+            "excludes": [],
+            "includes": [],
+            "replaceOnly": [],
+            "handleTemplateMd5Link": true
+          },
+          "mainBundleIsRemote": false,
+          "mainBundleCompressionType": "merge_dep",
+          "useSplashScreen": true,
+          "bundleCommonChunk": false,
+          "packAutoAtlas": true,
+          "startScene": "6528b51d-a902-461b-80c4-48fefb2d5bb9",
+          "outputName": "Lucky7",
+          "taskName": "web-mobile",
+          "scenes": [
+            {
+              "url": "db://assets/scene/main.scene",
+              "uuid": "6528b51d-a902-461b-80c4-48fefb2d5bb9"
+            }
+          ],
+          "wasmCompressionMode": false,
+          "binGroupConfig": {
+            "threshold": 16,
+            "enable": false
+          },
+          "packages": {},
+          "__version__": "1.3.9",
+          "logDest": "project://temp/builder/log/web-mobile6-6-2026 12-18.log"
+        },
+        "time": "6-6-2026 12:18:35",
+        "dirty": false
+      }
+    }
   }
 }
