@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Sprite, SpriteFrame, Vec3 } from 'cc';
+import { _decorator, Component, Label, Node, Sprite, SpriteFrame, Vec3 } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('GameManager')
@@ -22,11 +22,21 @@ export class GameManager extends Component {
     @property([SpriteFrame])
     symbolSprites: SpriteFrame[] = [];
 
+    @property(Label)
+    balanceLabel: Label = null;
+
+    @property(Label)
+    winAmount: Label = null;
+
     private result = {
         reel1: 0,
         reel2: 0,
         reel3: 0
     };
+
+    private startingBalance = 1000;
+    private betAmount = 20;
+    private betAmountMultiplier = [1,2];
 
     private startPositions: Map<Node, Vec3> = new Map();
 
@@ -52,6 +62,7 @@ export class GameManager extends Component {
         });
 
         this.updateSymbols();
+        this.balanceLabel.string = "BALANCE: " +this.startingBalance.toString();
     }
 
     update(dt: number) {
@@ -88,37 +99,43 @@ export class GameManager extends Component {
 
     spin() {
 
-        this.spinOn.active = false;
-        this.spinOff.active = true;
+        if(this.startingBalance > 0 && this.isSpinning == false)
+        {
+            this.spinOn.active = false;
+            this.spinOff.active = true;
 
-        this.isSpinning = true;
-        this.reelsStopped = 0;
+            this.isSpinning = true;
+            this.reelsStopped = 0;
 
-        this.reelActive[1] = true;
-        this.reelActive[2] = true;
-        this.reelActive[3] = true;
+            this.reelActive[1] = true;
+            this.reelActive[2] = true;
+            this.reelActive[3] = true;
 
-        this.reelSpeed[1] = this.speed;
-        this.reelSpeed[2] = this.speed;
-        this.reelSpeed[3] = this.speed;
+            this.reelSpeed[1] = this.speed;
+            this.reelSpeed[2] = this.speed;
+            this.reelSpeed[3] = this.speed;
 
-        // 🎰 GENERATE RESULT FIRST
-        this.generateResult();
+            this.startingBalance -= this.betAmount;
+            this.balanceLabel.string = "BALANCE: " +this.startingBalance.toString();
 
-        console.log("🎰 RESULT:", this.result);
+            // 🎰 GENERATE RESULT FIRST
+            this.generateResult();
 
-        // 🎯 APPLY RESULT TO SYMBOLS (IMPORTANT ADD)
-        this.applyResultToReels();
+            console.log("🎰 RESULT:", this.result);
 
-        this.scheduleOnce(() => this.stopReel(this.reel1Symbols, 1), 2);
+            // 🎯 APPLY RESULT TO SYMBOLS (IMPORTANT ADD)
+            this.applyResultToReels();
 
-        this.scheduleOnce(() => {
-            this.scheduleOnce(() => this.stopReel(this.reel2Symbols, 2), 1);
-        }, 2);
+            this.scheduleOnce(() => this.stopReel(this.reel1Symbols, 1), 2);
 
-        this.scheduleOnce(() => {
-            this.scheduleOnce(() => this.stopReel(this.reel3Symbols, 3), 1);
-        }, 5);
+            this.scheduleOnce(() => {
+                this.scheduleOnce(() => this.stopReel(this.reel2Symbols, 2), 1);
+            }, 2);
+
+            this.scheduleOnce(() => {
+                this.scheduleOnce(() => this.stopReel(this.reel3Symbols, 3), 1);
+            }, 5);
+        }
     }
 
     // 🎯 APPLY RESULT TO REELS
@@ -200,8 +217,6 @@ export class GameManager extends Component {
 
         console.log("ALL REELS STOPPED!");
 
-        this.isSpinning = false;
-
         this.reelSpeed[1] = 0;
         this.reelSpeed[2] = 0;
         this.reelSpeed[3] = 0;
@@ -210,32 +225,75 @@ export class GameManager extends Component {
         this.reelActive[2] = false;
         this.reelActive[3] = false;
 
-        this.spinOn.active = true;
-        this.spinOff.active = false;
+        
 
         // 🎯 WIN CHECK HERE
         const isWin = this.checkWin();
 
-        if (isWin) {
-            console.log("🔥 YOU WON!");
-        } else {
-            console.log("💀 YOU LOST!");
+        if(isWin == "JACKPOT")
+        {
+            let amountWin = this.betAmount * this.betAmountMultiplier[1];
+            this.winAmount.string = "WIN: "+(amountWin).toLocaleString();
+            this.scheduleOnce(() => {
+                this.winAmount.string = "WIN: 0";
+                this.startingBalance += amountWin;
+                this.balanceLabel.string = "BALANCE: "+this.startingBalance.toLocaleString();
+            }, 2);
+        }else if(isWin == "PAIR")
+        {
+            let amountWin = this.betAmount * this.betAmountMultiplier[0];
+            this.winAmount.string = "WIN: "+(amountWin).toLocaleString();
+            this.scheduleOnce(() => {
+                this.winAmount.string = "WIN: 0";
+                this.startingBalance += amountWin;
+                this.balanceLabel.string = "BALANCE: "+this.startingBalance.toLocaleString();
+            }, 2);
+        }else{
+            this.isSpinning = false;
+            this.spinOn.active = true;
+            this.spinOff.active = false;
+            return;
         }
+
+
+        this.scheduleOnce(() => {
+            this.isSpinning = false;
+            this.spinOn.active = true;
+            this.spinOff.active = false;
+        }, 2);
         
     }
     
 
-    checkWin(): boolean {
+    checkWin(): string {
 
         const r1 = this.result.reel1;
         const r2 = this.result.reel2;
         const r3 = this.result.reel3;
 
-        const isWin = (r1 === r2) && (r2 === r3);
+        // JACKPOT (3 same)
+        if (r1 === r2 && r2 === r3) {
 
-        console.log("🎯 CHECK WIN:", this.result, "=>", isWin ? "WIN" : "LOSE");
+            console.log("🎰 JACKPOT!", this.result);
 
-        return isWin;
+            return "JACKPOT";
+        }
+
+        // PAIR (2 same)
+        if (
+            r1 === r2 ||
+            r1 === r3 ||
+            r2 === r3
+        ) {
+
+            console.log("✨ PAIR MATCH!", this.result);
+
+            return "PAIR";
+        }
+
+        console.log("❌ LOSE!", this.result);
+
+        return "LOSE";
     }
 
     generateResult() {
@@ -243,6 +301,15 @@ export class GameManager extends Component {
         this.result.reel1 = Math.floor(Math.random() * 4);
         this.result.reel2 = Math.floor(Math.random() * 4);
         this.result.reel3 = Math.floor(Math.random() * 4);
+
+        return this.result;
+    }
+
+    generateResultDummy() {
+
+        this.result.reel1 = 0;
+        this.result.reel2 = 0;
+        this.result.reel3 = 0;
 
         return this.result;
     }
